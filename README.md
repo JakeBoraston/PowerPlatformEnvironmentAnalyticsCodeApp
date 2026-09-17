@@ -1,4 +1,4 @@
-# Platform Analytics
+# Environment Analytics
 
 A read-only Power Apps code app that shows the health of one Power Platform
 environment: cloud flows and their runs, failures, canvas and model-driven apps,
@@ -8,6 +8,166 @@ references, environment variables, system jobs and users.
 It reads only the system tables every Dataverse environment already has. There
 is no solution to import first, no custom table, no connector and no tenant
 configuration in the code, so the same source deploys to any environment.
+
+## Install
+
+Download the latest solution from
+[Releases](https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalytics/releases)
+and import it. Nothing to build.
+
+1. In [make.powerapps.com](https://make.powerapps.com), pick the environment, then **Solutions > Import solution**.
+2. Choose the zip. Take the **managed** one to use the app as it is; the unmanaged one only if you want to change it in that environment.
+3. Open **Environment Analytics** from Apps.
+
+Check the prerequisites below first: code apps enabled, Power Apps Premium
+licences, and a security role that can read the tables. Building from source is
+covered further down, and is only needed to change the app.
+
+## What's in it
+
+Every page works in light and dark mode, and with a keyboard or screen reader.
+Every chart has a written summary and a data table behind **Show data table**.
+Colour is used for status only: green for succeeded, amber for needs attention,
+red for failed.
+
+### Dashboard
+
+![Dashboard](docs/images/dashboard.png)
+
+- **How this app works** panel explaining where the data comes from and the security role to use (collapsible, remembers its state)
+- Platform tiles: canvas apps, model-driven apps, solutions, agents and active users
+- **Environment health**: fourteen checks over the environment, ranked, each with a count, what to do about it and a link to the records behind it. Unresolved environment variables, flows that have never succeeded, failed runs, failed solution operations and failed system jobs come first; then orphaned connection references, references outside a solution, flows binding connectors directly and assets owned by disabled users; then housekeeping such as flows that have not run, stale canvas apps and agents never published
+- Flow run tiles: total, succeeded, failed, cancelled, average duration and active flows
+- **Runs Over Time** by status, and a **Success Rate** gauge
+- **Flow Activity by Day & Hour** heatmap showing when flows run
+- **Runs by Status**, **Weekly Status Trend**, **Failures by Flow**
+- **Optimisation Targets**: flows plotted by run count against average duration, sized by total time and coloured by failure rate
+- **Avg Duration (Top 10 Slowest)** flows
+- **Platform Inventory** treemap of flows, apps, solutions, agents and users
+- Time range of 7, 14 or 28 days
+- If a data source can't load (missing permissions, or no Copilot Studio in the environment), it is named with the reason and a **Try again** button, and its tiles show a dash rather than a misleading zero
+
+### Cloud Flows
+
+![Cloud Flows](docs/images/flows.png)
+
+- Every cloud flow with its owner, state, created date and, for the selected period, total, succeeded and failed runs and success rate
+- Search by name or owner, filter by state, sort any column
+- Open any flow in Power Automate
+
+### Flow detail
+
+![Flow detail](docs/images/flow-detail.png)
+
+- Run tiles: total, succeeded, failed, cancelled and average duration
+- Run trend over the period, and a day-and-hour heatmap for this flow
+- Run history filtered by result, with start and end times, duration, trigger and error
+- Links to the flow and to each run in Power Automate
+
+### Failures & Cancellations
+
+![Failures](docs/images/failures.png)
+
+- Every failed or cancelled run in the period, newest first
+- Filter by result, search by flow name, sort any column
+- Error dialog with a readable summary and the raw error JSON
+- One click to the run in Power Automate
+
+### Connections
+
+![Connections](docs/images/connections.png)
+
+- Tiles for connection references, connectors in use, orphaned references and references outside any solution
+- Interactive graph linking solutions, connection references and the flows that use them. Drag, zoom and click to isolate, or use **Find** from the keyboard
+- Connector usage by number of flows
+- A note on flows that bind a connector directly rather than through a connection reference
+- Reference inventory with connector, solution, flow count and state, filterable to orphaned or unsolutioned references
+
+### Canvas Apps
+
+![Canvas Apps](docs/images/canvas-apps.png)
+
+- Tiles for total, published, managed, unmanaged and stale apps (not modified in 90 days), with the stale apps named
+- App inventory with owner, last published date, managed state, origin (system or custom) and stale flag
+- Search by name or owner; filter by managed state and origin
+- **Apps by Owner** chart
+
+### Model-driven Apps
+
+![Model-driven Apps](docs/images/model-apps.png)
+
+- Tiles for total, published and draft apps
+- App inventory with unique name, status, managed state, modified and published dates
+- Search by name; filter by status
+
+### Copilot Studio Agents
+
+![Agents](docs/images/agents.png)
+
+- Tiles for total, active and draft agents, topics, knowledge sources and conversations in the last 28 days
+- **Agent Components by Type** chart
+- Agent inventory with owner, status, topic, knowledge source and conversation counts, created and published dates; sortable
+- Open any agent in Copilot Studio
+
+### Agent detail
+
+![Agent detail](docs/images/agent-detail.png)
+
+- Tiles for topics, knowledge sources, components, conversations and status
+- The agent's instructions and conversation starters
+- Day-and-hour heatmap of when the agent is used
+- Topics (system topics flagged) and knowledge sources with their type and location
+- Component breakdown and recent conversations
+
+### Solutions
+
+![Solutions](docs/images/solutions.png)
+
+- Tiles for total, managed and unmanaged solutions, and publishers
+- Solution inventory with version, publisher, managed state and install date; searchable, filterable and sortable
+- **Solutions by Publisher** chart
+- Ownership graph linking solutions to the flows, apps and agents they contain
+
+### Solution History
+
+![Solution History](docs/images/solution-history.png)
+
+- Tiles for operations, failed, succeeded and solutions touched
+- **Busiest solutions**, with failures called out
+- Every import, export, upgrade and publish with version, publisher, result, duration and status; the exception message on hover for failures
+- Search by solution, publisher or version; filter by result
+
+### Environment Variables
+
+![Environment Variables](docs/images/environment-variables.png)
+
+- Tiles for definitions, unresolved, overridden and managed variables
+- Warning when a variable has neither a value nor a default, the usual reason a solution imports cleanly but fails at runtime
+- Definitions joined to their current values, with type, default and status
+- Search by name or description; filter to unresolved, overridden or default
+
+### System Jobs
+
+![System Jobs](docs/images/system-jobs.png)
+
+- Tiles for jobs, failed, in flight and success rate of finished jobs
+- Jobs by operation type, with the failed share of each shown in red
+- Job list (failed only by default) with operation type, table, status, duration and created date
+- Full job message in a dialog
+
+### Users
+
+![Users](docs/images/users.png)
+
+- Tiles for total, active and disabled users
+- User list with email, status, created and modified dates
+- Search by name or email; filter by status
+
+### Settings
+
+- Theme: match my device, light or dark (remembered in the browser)
+- Flow run period used across the dashboard, Flows and Failures
+- The environment ID the app is connected to
 
 ## Before you deploy
 
@@ -32,7 +192,7 @@ Tables read: `workflow`, `flowrun`, `canvasapp`, `appmodule`, `solution`,
 `conversationtranscript`, `systemuser`, `connectionreference`,
 `environmentvariabledefinition`, `environmentvariablevalue`, `asyncoperation`.
 
-## Deploy to a new environment
+## Build and deploy from source
 
 Requires Node.js 20.19 or later (the minimum for Vite 7).
 
