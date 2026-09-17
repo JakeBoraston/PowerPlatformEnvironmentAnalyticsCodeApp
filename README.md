@@ -15,13 +15,25 @@ Download the latest solution from
 [Releases](https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalytics/releases)
 and import it. Nothing to build.
 
-1. In [make.powerapps.com](https://make.powerapps.com), pick the environment, then **Solutions > Import solution**.
-2. Choose the zip. Take the **managed** one to use the app as it is; the unmanaged one only if you want to change it in that environment.
-3. Open **Environment Analytics** from Apps.
+1. **Turn on code apps for the environment**, if it isn't on already: Power
+   Platform admin center > Environments > your environment > Settings >
+   Product > Features > *Power Apps code apps* > **Enable code apps**. The app
+   will not run without this.
+2. **Import the solution.** In [make.powerapps.com](https://make.powerapps.com),
+   pick the environment, then **Solutions > Import solution > Browse**, choose
+   the zip, then **Next > Import**. Take the **managed** zip to use the app as
+   it is; take the unmanaged one only if you intend to change it in that
+   environment.
+3. **Open it.** The solution contains one app, *Environment Analytics*. Open it
+   from **Apps**, or from inside the solution.
+4. **Share it with whoever needs it.** In **Apps**, select the app, then
+   **Share**. They also need a Power Apps Premium licence and a security role
+   that can read the tables (see below); without one, sections of the app report
+   that they could not load rather than showing figures.
 
-Check the prerequisites below first: code apps enabled, Power Apps Premium
-licences, and a security role that can read the tables. Building from source is
-covered further down, and is only needed to change the app.
+To update later, download the newer zip and import it the same way; it upgrades
+the app in place. Building from source is covered further down, and is only
+needed if you want to change the app.
 
 ## What's in it
 
