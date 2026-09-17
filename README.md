@@ -12,7 +12,7 @@ configuration in the code, so the same source deploys to any environment.
 ## Install
 
 Download the latest solution from
-[Releases](https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalytics/releases)
+[Releases](https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalyticsCodeApp/releases)
 and import it. Nothing to build.
 
 1. **Turn on code apps for the environment**, if it isn't on already: Power

@@ -5,7 +5,7 @@
   "description": "A read-only Power Apps code app that shows the health of a Power Platform environment.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalytics.git"
+    "url": "https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalyticsCodeApp.git"
   },
   "type": "module",
   "engines": {
