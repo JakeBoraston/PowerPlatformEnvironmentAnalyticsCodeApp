@@ -6,7 +6,7 @@ solutions and their import history, Copilot Studio agents, connection
 references, environment variables, system jobs and users.
 
 It reads only the system tables every Dataverse environment already has. There
-is no solution to import first, no custom table, no connector and no tenant
+is no custom table, no connector and no tenant
 configuration in the code, so the same source deploys to any environment.
 
 ## Install
