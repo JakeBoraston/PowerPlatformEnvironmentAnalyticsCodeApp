@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.local
+# Per-environment copies of power.config.json (e.g. power.config.prod.json)
+power.config.*.json
+.DS_Store
+
+# Leftover connector schema from an early add-data-source; unused, and it
+# embeds the source environment host.
+.power/schemas/commondataserviceforapps/

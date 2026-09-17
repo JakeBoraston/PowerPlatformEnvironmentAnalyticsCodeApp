@@ -1,0 +1,396 @@
+@import "tailwindcss";
+/* LayerChart's daisyUI preset maps its surface tokens onto the DaisyUI theme,
+   so charts follow light and dark mode with the rest of the app. */
+@import "layerchart/daisyui-5.css";
+
+/* DaisyUI's stock light and dark themes. No custom palette to maintain, and
+   nothing tenant-specific baked in. The mode is set on <html data-theme> by
+   stores/themeStore.ts from the viewer's choice in Settings. */
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text",
+               "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Cascadia Code", "SF Mono",
+               Menlo, Consolas, monospace;
+}
+
+/* ============================================================================
+   Tokens.
+
+   Everything here is an alias onto a DaisyUI theme variable, so the app follows
+   the theme rather than carrying a second palette that can drift out of step.
+   Swapping DaisyUI's theme restyles the whole app.
+   ============================================================================ */
+
+:root {
+  /* surfaces */
+  --page: var(--color-base-100);
+  --card: var(--color-base-100);
+  --sunken: var(--color-base-200);
+  --line: var(--color-base-300);
+  --rail: var(--color-neutral);
+
+  /* form fields — a shade off the canvas so an input reads as an input */
+  --field: var(--color-base-200);
+  --field-line: var(--color-base-300);
+
+  /* text */
+  --ink: var(--color-base-content);
+  --ink-2: color-mix(in oklab, var(--color-base-content) 72%, var(--color-base-100));
+  /* 60% is the lightest mix that still clears 4.5:1 on the sunken surface */
+  --ink-3: color-mix(in oklab, var(--color-base-content) 60%, var(--color-base-100));
+
+  /* against the rail, which is dark */
+  --on-rail: var(--color-neutral-content);
+  --on-rail-dim: color-mix(in oklab, var(--color-neutral-content) 72%, var(--color-neutral));
+
+  /* interactive */
+  --primary: var(--color-primary);
+  --on-primary: var(--color-primary-content);
+  --primary-wash: color-mix(in oklab, var(--color-primary) 12%, var(--color-base-100));
+  /* Link text. The primary fill is fine for text on a light page; dark mode
+     lifts it (below). */
+  --link: var(--color-primary);
+
+  /* state */
+  --ok: var(--color-success);
+  --ok-wash: color-mix(in oklab, var(--color-success) 14%, var(--color-base-100));
+  --warn: var(--color-warning);
+  --warn-wash: color-mix(in oklab, var(--color-warning) 16%, var(--color-base-100));
+  --bad: var(--color-error);
+  --bad-wash: color-mix(in oklab, var(--color-error) 13%, var(--color-base-100));
+
+  /* Text on a wash. The raw state colours are fills, not ink: on their own wash
+     they measure 1.6 to 2.5:1. DaisyUI's paired content colours keep the hue and
+     clear 8:1. */
+  --ok-ink: var(--color-success-content);
+  --warn-ink: var(--color-warning-content);
+  --bad-ink: var(--color-error-content);
+
+  /* geometry — tighter than DaisyUI's defaults, which are pill-round out of the box */
+  --radius-selector: 0.25rem;
+  --radius-field: 0.3125rem;
+  --radius-box: 0.375rem;
+
+  --r-tag: 0.25rem;
+  --r-ctl: 0.3125rem;
+  --r-card: 0.375rem;
+
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode. On a dark wash the paired content colours are dark too, so text
+   on a wash takes the bright fill instead (4.6:1 and up), and links are lifted
+   off the primary fill, which is 3.4:1 on the dark page. */
+[data-theme="dark"] {
+  --ok-ink: var(--color-success);
+  --warn-ink: var(--color-warning);
+  --bad-ink: var(--color-error);
+  --link: color-mix(in oklab, var(--color-primary) 55%, white);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--page);
+  color: var(--ink);
+}
+
+/* LayerChart's hover highlight defaults to a color-mix toward `transparent`.
+   The Power Apps webview does not treat `transparent` as alpha inside an oklab
+   mix, so it paints a solid dark block over the chart (seen in Iris). Explicit
+   alpha fills avoid it. Unlayered, so they beat the library's layered defaults. */
+.lc-highlight-area {
+  --fill-color: rgb(66 42 213 / 0.07);
+}
+.lc-highlight-bar {
+  --fill-color: rgb(66 42 213 / 0.14);
+}
+/* Bars carry a black stroke by default; the fill is enough. */
+.lc-bar {
+  stroke: none;
+}
+
+[data-theme="dark"] .lc-highlight-area {
+  --fill-color: rgb(255 255 255 / 0.06);
+}
+[data-theme="dark"] .lc-highlight-bar {
+  --fill-color: rgb(255 255 255 / 0.12);
+}
+
+/* ---------------------------------------------------------------------------
+   Type scale. Product register: one family, fixed rem steps, tight ratio.
+   --------------------------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 650;
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+h1 { font-size: 1.5rem; letter-spacing: -0.028em; }
+h2 { font-size: 1.25rem; letter-spacing: -0.024em; }
+h3 { font-size: 1rem; }
+h4 { font-size: 0.9375rem; }
+h5 { font-size: 0.875rem; }
+h6 { font-size: 0.8125rem; }
+
+/* A section heading one level below the page title, sized as the old h3s were.
+   The element rules above are unlayered, so they beat Tailwind's size
+   utilities; a class is the reliable override. */
+.pa-h3 { font-size: 1rem; letter-spacing: -0.018em; }
+
+p { margin: 0; color: var(--ink); }
+
+/* Links are primary-coloured, but not when the anchor is styled as a button —
+   that rule was overriding DaisyUI's button text colour and producing
+   primary-on-primary text. */
+a:not(.btn) { color: var(--link); }
+
+/* Numerals must not reflow as data refreshes. */
+.tabular,
+th.num,
+td.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ---------------------------------------------------------------------------
+   Components
+   --------------------------------------------------------------------------- */
+
+/* KPI tile. A neutral card by default; colour is reserved for status (see
+   KpiCard.svelte), so a tinted tile always means something. The wash and ink
+   tokens keep the tinted tiles above 4.5:1 in both modes. */
+.pa-tile {
+  border-radius: var(--r-card);
+  padding: 0.875rem 1rem;
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.pa-tile dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--ink-2);
+}
+.pa-tile dd {
+  margin: 0;
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+.pa-tile small {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.3125rem;
+  color: var(--ink-2);
+}
+.pa-tile .icon { color: var(--ink-3); }
+
+.pa-tile--good { background: var(--ok-wash);   border-color: color-mix(in oklab, var(--color-success) 35%, var(--card)); }
+.pa-tile--warn { background: var(--warn-wash); border-color: color-mix(in oklab, var(--color-warning) 40%, var(--card)); }
+.pa-tile--bad  { background: var(--bad-wash);  border-color: color-mix(in oklab, var(--color-error) 35%, var(--card)); }
+.pa-tile--good :is(dd, .icon) { color: var(--ok-ink); }
+.pa-tile--warn :is(dd, .icon) { color: var(--warn-ink); }
+.pa-tile--bad  :is(dd, .icon) { color: var(--bad-ink); }
+
+/* Card: hairline, not elevation — a shadow on white-on-white is just a smudge */
+.pa-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 1rem;
+  min-width: 0;
+}
+
+.pa-muted { color: var(--ink-2); }
+.pa-faint { color: var(--ink-3); }
+
+.pa-pill {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.1875rem 0.5rem;
+  border-radius: var(--r-tag);
+  white-space: nowrap;
+}
+.pa-pill--ok   { background: var(--ok-wash);   color: var(--ok-ink); }
+.pa-pill--warn { background: var(--warn-wash); color: var(--warn-ink); }
+.pa-pill--bad  { background: var(--bad-wash);  color: var(--bad-ink); }
+.pa-pill--idle { background: var(--sunken);    color: var(--ink-2); }
+
+/* Failure text outside a pill, e.g. a count in a breakdown. */
+.pa-bad-text { color: var(--bad-ink); font-weight: 600; }
+
+.pa-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.pa-table thead tr { border-bottom: 1px solid var(--line); }
+.pa-table th {
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ink-3);
+  padding: 0.5rem 0.625rem;
+  white-space: nowrap;
+}
+.pa-table tbody tr { border-bottom: 1px solid var(--line); }
+.pa-table tbody tr:last-child { border-bottom: none; }
+.pa-table tbody tr:hover { background: var(--sunken); }
+.pa-table td { padding: 0.625rem; }
+.pa-table td.num,
+.pa-table th.num { text-align: right; }
+
+.pa-field {
+  background: var(--field);
+  border: 1px solid var(--field-line);
+  border-radius: var(--r-ctl);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem;
+}
+.pa-field::placeholder { color: var(--ink-3); }
+.pa-field:focus,
+.pa-field:focus-visible,
+.pa-field:focus-within {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-wash);
+}
+
+.pa-chip {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.3125rem 0.625rem;
+  border-radius: var(--r-tag);
+  background: var(--field);
+  border: 1px solid var(--field-line);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.pa-chip:hover { color: var(--ink); }
+.pa-chip[aria-pressed="true"] {
+  background: var(--primary);
+  border-color: transparent;
+  color: var(--on-primary);
+}
+
+/* Keyboard affordance, everywhere */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-primary) 22%, var(--color-base-100));
+  color: var(--ink);
+}
+
+/* Scrollable regions (wide tables, capped lists) must be reachable by keyboard,
+   so they carry tabindex="0" and need a visible ring of their own. */
+/* A table's scroll area. Pages are flex columns, so without flex-shrink: 0 a
+   region squashes to a sliver and scrolls inside itself. It keeps at least
+   40vh, stops at 75vh so the content below stays reachable, and pins its
+   header row while it scrolls. */
+.pa-table-region {
+  flex-shrink: 0;
+  min-height: 40vh;
+  max-height: 75vh;
+  overflow: auto;
+}
+.pa-table-region thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--card);
+}
+
+.pa-scroll:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+/* Skip link: off-screen until it takes focus. */
+.pa-skip {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: var(--z-tooltip);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--r-ctl);
+  background: var(--primary);
+  color: var(--on-primary) !important;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+.pa-skip:focus-visible { transform: none; }
+
+/* Sortable column header: the whole cell is the button. */
+.pa-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: inherit;
+}
+.pa-sort:hover { color: var(--ink); }
+
+.pa-skeleton {
+  background: var(--sunken);
+  border-radius: var(--r-ctl);
+  position: relative;
+  overflow: hidden;
+}
+.pa-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+  transform: translateX(-100%);
+  animation: pa-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes pa-shimmer {
+  to { transform: translateX(100%); }
+}
+
+/* Reduced motion: stop anything that travels or loops. Opacity changes stay,
+   because they carry state without movement. */
+@media (prefers-reduced-motion: reduce) {
+  .pa-skeleton::after { animation: none; }
+  .animate-spin { animation: none; }
+  .loading { animation-duration: 2.4s; }
+}

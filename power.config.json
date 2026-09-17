@@ -1,0 +1,84 @@
+{
+  "appId": "",
+  "appDisplayName": "Platform Analytics",
+  "description": "Read-only health dashboard for a Power Platform environment: flows, apps, agents, solutions and users",
+  "environmentId": "",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "logoPath": "Default",
+  "localAppUrl": "http://localhost:3000/",
+  "region": "prod",
+  "connectionReferences": {},
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "processes": {
+          "entitySetName": "workflows",
+          "logicalName": "workflow"
+        },
+        "flowsessions": {
+          "entitySetName": "flowsessions",
+          "logicalName": "flowsession"
+        },
+        "flowruns": {
+          "entitySetName": "flowruns",
+          "logicalName": "flowrun"
+        },
+        "canvasapps": {
+          "entitySetName": "canvasapps",
+          "logicalName": "canvasapp"
+        },
+        "model_drivenapps": {
+          "entitySetName": "appmodules",
+          "logicalName": "appmodule"
+        },
+        "solutions": {
+          "entitySetName": "solutions",
+          "logicalName": "solution"
+        },
+        "agents": {
+          "entitySetName": "bots",
+          "logicalName": "bot"
+        },
+        "users": {
+          "entitySetName": "systemusers",
+          "logicalName": "systemuser"
+        },
+        "agentcomponents": {
+          "entitySetName": "botcomponents",
+          "logicalName": "botcomponent"
+        },
+        "conversationtranscripts": {
+          "entitySetName": "conversationtranscripts",
+          "logicalName": "conversationtranscript"
+        },
+        "connectionreferences": {
+          "entitySetName": "connectionreferences",
+          "logicalName": "connectionreference"
+        },
+        "solutionshistory": {
+          "entitySetName": "msdyn_solutionhistories",
+          "logicalName": "msdyn_solutionhistory"
+        },
+        "environmentvariabledefinitions": {
+          "entitySetName": "environmentvariabledefinitions",
+          "logicalName": "environmentvariabledefinition"
+        },
+        "environmentvariablevalues": {
+          "entitySetName": "environmentvariablevalues",
+          "logicalName": "environmentvariablevalue"
+        },
+        "systemjobs": {
+          "entitySetName": "asyncoperations",
+          "logicalName": "asyncoperation"
+        },
+        "solutioncomponents": {
+          "entitySetName": "solutioncomponents",
+          "logicalName": "solutioncomponent"
+        }
+      },
+      "environmentVariableName": ""
+    }
+  },
+  "version": "1.0"
+}

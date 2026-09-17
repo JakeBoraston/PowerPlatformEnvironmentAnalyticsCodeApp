@@ -1,0 +1,861 @@
+{
+  "name": "canvasapp",
+  "title": "Canvas Apps",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "x-ms-dataverse-entity": true,
+      "x-ms-dataverse-entityset": "canvasapps",
+      "x-ms-dataverse-primary-id": "canvasappid",
+      "x-ms-dataverse-primary-name": "name",
+      "properties": {
+        "aadcreatedbyid": {
+          "type": "string",
+          "title": "Created By",
+          "x-ms-dataverse-attribute": "aadcreatedbyid",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "AADCreatedById",
+          "maxLength": 100
+        },
+        "aadlastmodifiedbyid": {
+          "type": "string",
+          "title": "Last Modified By",
+          "x-ms-dataverse-attribute": "aadlastmodifiedbyid",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "AADLastModifiedById",
+          "required": true,
+          "maxLength": 100
+        },
+        "aadlastpublishedbyid": {
+          "type": "string",
+          "title": "Last Published By",
+          "x-ms-dataverse-attribute": "aadlastpublishedbyid",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "AADLastPublishedById",
+          "required": true,
+          "maxLength": 100
+        },
+        "admincontrolbypassconsent": {
+          "type": "string",
+          "title": "Admin Control Bypass Consent",
+          "x-ms-dataverse-attribute": "admincontrolbypassconsent",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "AdminControlBypassConsent",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "c728519f-1049-468e-9f9d-786157d8b912",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "admincontrolbypassconsentname": {
+          "type": "string",
+          "title": "admincontrolbypassconsentname",
+          "x-ms-dataverse-attribute": "admincontrolbypassconsentname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "AdminControlBypassConsentName",
+          "x-ms-read-only": true
+        },
+        "appcomponentdependencies": {
+          "type": "string",
+          "title": "appcomponentdependencies",
+          "x-ms-dataverse-attribute": "appcomponentdependencies",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "AppComponentDependencies",
+          "maxLength": 768000
+        },
+        "appcomponents": {
+          "type": "string",
+          "title": "appcomponents",
+          "x-ms-dataverse-attribute": "appcomponents",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "AppComponents",
+          "maxLength": 768000
+        },
+        "appcopilotreference": {
+          "type": "string",
+          "title": "App Copilot Reference",
+          "x-ms-dataverse-attribute": "appcopilotreference",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "AppCopilotReference",
+          "maxLength": 768000
+        },
+        "appopenuri": {
+          "type": "string",
+          "title": "appopenuri",
+          "x-ms-dataverse-attribute": "appopenuri",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "AppOpenUri",
+          "maxLength": 2000
+        },
+        "appversion": {
+          "type": "string",
+          "title": "appversion",
+          "x-ms-dataverse-attribute": "appversion",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "AppVersion",
+          "required": true,
+          "maxLength": 2000
+        },
+        "assets": {
+          "type": "string",
+          "title": "Assets",
+          "x-ms-dataverse-attribute": "assets",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "Assets",
+          "x-ms-read-only": true
+        },
+        "assets_name": {
+          "type": "string",
+          "title": "assets_name",
+          "x-ms-dataverse-attribute": "assets_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "Assets_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "authorizationreferences": {
+          "type": "string",
+          "title": "authorizationreferences",
+          "x-ms-dataverse-attribute": "authorizationreferences",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "AuthorizationReferences",
+          "maxLength": 2000
+        },
+        "background_image": {
+          "type": "string",
+          "title": "Background Image",
+          "x-ms-dataverse-attribute": "background_image",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "BackgroundImage",
+          "x-ms-read-only": true
+        },
+        "backgroundcolor": {
+          "type": "string",
+          "title": "backgroundcolor",
+          "x-ms-dataverse-attribute": "backgroundcolor",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "BackgroundColor",
+          "maxLength": 2000
+        },
+        "backgroundimage_name": {
+          "type": "string",
+          "title": "backgroundimage_name",
+          "x-ms-dataverse-attribute": "backgroundimage_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "BackgroundImage_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "bypassconsent": {
+          "type": "string",
+          "title": "Bypass Consent",
+          "x-ms-dataverse-attribute": "bypassconsent",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "BypassConsent",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "e0e664e5-5391-4641-b353-59a61dd18fbd",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "bypassconsentname": {
+          "type": "string",
+          "title": "bypassconsentname",
+          "x-ms-dataverse-attribute": "bypassconsentname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "BypassConsentName",
+          "x-ms-read-only": true
+        },
+        "canconsumeapppass": {
+          "type": "string",
+          "title": "Can Consume App Pass",
+          "x-ms-dataverse-attribute": "canconsumeapppass",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "CanConsumeAppPass",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "e64c4a0a-2d5e-4a55-9ca6-d70dbc076277",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "canvasappid": {
+          "type": "string",
+          "title": "canvasappid",
+          "x-ms-dataverse-attribute": "canvasappid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "CanvasAppId",
+          "required": true,
+          "x-ms-keyType": "primary"
+        },
+        "canvasapprowid": {
+          "type": "string",
+          "title": "canvasapprowid",
+          "x-ms-dataverse-attribute": "canvasapprowid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "CanvasAppRowId",
+          "x-ms-read-only": true,
+          "required": true
+        },
+        "canvasappsubtype": {
+          "type": "string",
+          "title": "Canvas App Subtype",
+          "x-ms-dataverse-attribute": "canvasappsubtype",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "CanvasAppSubtype",
+          "maxLength": 100
+        },
+        "canvasapptype": {
+          "type": "string",
+          "title": "Canvas App Type",
+          "x-ms-dataverse-attribute": "canvasapptype",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "CanvasAppType",
+          "enum": [
+            "Classic Canvas App",
+            "App Component Library",
+            "Custom Canvas Page",
+            "Unified App",
+            "Code App",
+            "Mobile App"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "0482dc00-3fd1-4ad3-b3d1-cc54e87c1f8e",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Canvas App Type",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "cdsdependencies": {
+          "type": "string",
+          "title": "cdsdependencies",
+          "x-ms-dataverse-attribute": "cdsdependencies",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "CdsDependencies",
+          "maxLength": 768000
+        },
+        "commitmessage": {
+          "type": "string",
+          "title": "The commit message.",
+          "x-ms-dataverse-attribute": "commitmessage",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "CommitMessage",
+          "maxLength": 2000
+        },
+        "componentstate": {
+          "type": "string",
+          "title": "Component State",
+          "x-ms-dataverse-attribute": "componentstate",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "ComponentState",
+          "x-ms-read-only": true,
+          "required": true,
+          "enum": [
+            "Published",
+            "Unpublished",
+            "Deleted",
+            "Deleted Unpublished"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "faece09f-cefc-11de-8150-00155da18b00",
+          "x-ms-isGlobal": true,
+          "x-ms-optionsetdisplayname": "Component State",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "connectionreferences": {
+          "type": "string",
+          "title": "connectionreferences",
+          "x-ms-dataverse-attribute": "connectionreferences",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "ConnectionReferences",
+          "maxLength": 768000
+        },
+        "createdbyclientversion": {
+          "type": "string",
+          "title": "createdbyclientversion",
+          "x-ms-dataverse-attribute": "createdbyclientversion",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "CreatedByClientVersion",
+          "maxLength": 100
+        },
+        "createdtime": {
+          "type": "string",
+          "title": "Created Time",
+          "x-ms-dataverse-attribute": "createdtime",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "CreatedTime"
+        },
+        "databasereferences": {
+          "type": "string",
+          "title": "databasereferences",
+          "x-ms-dataverse-attribute": "databasereferences",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "DatabaseReferences",
+          "maxLength": 768000
+        },
+        "description": {
+          "type": "string",
+          "title": "The description.",
+          "x-ms-dataverse-attribute": "description",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "Description",
+          "maxLength": 2000
+        },
+        "displayname": {
+          "type": "string",
+          "title": "displayname",
+          "x-ms-dataverse-attribute": "displayname",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "DisplayName",
+          "maxLength": 2000
+        },
+        "document": {
+          "type": "string",
+          "title": "Document",
+          "x-ms-dataverse-attribute": "document",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "Document",
+          "x-ms-read-only": true
+        },
+        "document_name": {
+          "type": "string",
+          "title": "document_name",
+          "x-ms-dataverse-attribute": "document_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "Document_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "embeddedapp": {
+          "type": "string",
+          "title": "embeddedapp",
+          "x-ms-dataverse-attribute": "embeddedapp",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "EmbeddedApp",
+          "maxLength": 2000
+        },
+        "galleryitemid": {
+          "type": "string",
+          "title": "The gallery item identifier",
+          "x-ms-dataverse-attribute": "galleryitemid",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "GalleryItemId",
+          "maxLength": 2000
+        },
+        "hascustommiddletier": {
+          "type": "string",
+          "title": "Has Custom Middle Tier",
+          "x-ms-dataverse-attribute": "hascustommiddletier",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "HasCustomMiddleTier",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "1f231d6b-d41c-f111-8341-70a8a52fa51d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Has Custom Middle Tier",
+          "x-ms-optionSetType": "Boolean"
+        },
+        "hascustommiddletiername": {
+          "type": "string",
+          "title": "hascustommiddletiername",
+          "x-ms-dataverse-attribute": "hascustommiddletiername",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "hascustommiddletierName",
+          "x-ms-read-only": true
+        },
+        "introducedversion": {
+          "type": "string",
+          "title": "Introduced Version",
+          "x-ms-dataverse-attribute": "introducedversion",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "IntroducedVersion",
+          "maxLength": 48
+        },
+        "iscdsupgraded": {
+          "type": "string",
+          "title": "Is CDS Upgraded",
+          "x-ms-dataverse-attribute": "iscdsupgraded",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "IsCdsUpgraded",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "ce38b970-11c0-4afc-a030-02bc8c74d32d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "iscdsupgradedname": {
+          "type": "string",
+          "title": "iscdsupgradedname",
+          "x-ms-dataverse-attribute": "iscdsupgradedname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "IsCdsUpgradedName",
+          "x-ms-read-only": true
+        },
+        "iscustomizable": {
+          "type": "string",
+          "title": "Customizable",
+          "x-ms-dataverse-attribute": "iscustomizable",
+          "x-ms-dataverse-type": "ManagedPropertyType",
+          "x-ms-schema-name": "IsCustomizable",
+          "required": true
+        },
+        "isfeaturedapp": {
+          "type": "string",
+          "title": "Is Featured App",
+          "x-ms-dataverse-attribute": "isfeaturedapp",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "IsFeaturedApp",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "44630386-2fed-4c51-bdb0-f4d34a0fd944",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "isfeaturedappname": {
+          "type": "string",
+          "title": "isfeaturedappname",
+          "x-ms-dataverse-attribute": "isfeaturedappname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "IsFeaturedAppName",
+          "x-ms-read-only": true
+        },
+        "isheroapp": {
+          "type": "string",
+          "title": "Is Hero App",
+          "x-ms-dataverse-attribute": "isheroapp",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "IsHeroApp",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "bf05adfe-aae9-4dec-81c2-ef5178f287e4",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "isheroappname": {
+          "type": "string",
+          "title": "isheroappname",
+          "x-ms-dataverse-attribute": "isheroappname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "IsHeroAppName",
+          "x-ms-read-only": true
+        },
+        "ishidden": {
+          "type": "string",
+          "title": "Is Hidden",
+          "x-ms-dataverse-attribute": "ishidden",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "IsHidden",
+          "enum": [
+            "False",
+            "True"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "3b3d4507-08e2-490c-acc0-71c017f2a79d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionSetType": "Boolean"
+        },
+        "ishiddenname": {
+          "type": "string",
+          "title": "ishiddenname",
+          "x-ms-dataverse-attribute": "ishiddenname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "IsHiddenName",
+          "x-ms-read-only": true
+        },
+        "ismanaged": {
+          "type": "string",
+          "title": "Is Managed",
+          "x-ms-dataverse-attribute": "ismanaged",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "IsManaged",
+          "x-ms-read-only": true,
+          "required": true,
+          "enum": [
+            "Unmanaged",
+            "Managed"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "9d04e035-5408-4c1d-a5aa-20445a02f691",
+          "x-ms-isGlobal": true,
+          "x-ms-optionsetdisplayname": "Is Component Managed",
+          "x-ms-optionSetType": "Boolean"
+        },
+        "ismanagedname": {
+          "type": "string",
+          "title": "ismanagedname",
+          "x-ms-dataverse-attribute": "ismanagedname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "IsManagedName",
+          "x-ms-read-only": true
+        },
+        "large_icon": {
+          "type": "string",
+          "title": "Large Icon",
+          "x-ms-dataverse-attribute": "large_icon",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "LargeIcon",
+          "x-ms-read-only": true
+        },
+        "largeicon_name": {
+          "type": "string",
+          "title": "largeicon_name",
+          "x-ms-dataverse-attribute": "largeicon_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "LargeIcon_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "lastmodifiedtime": {
+          "type": "string",
+          "title": "Last Modified Time",
+          "x-ms-dataverse-attribute": "lastmodifiedtime",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "LastModifiedTime"
+        },
+        "lastpublishtime": {
+          "type": "string",
+          "title": "Last Publish Time",
+          "x-ms-dataverse-attribute": "lastpublishtime",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "LastPublishTime"
+        },
+        "medium_icon": {
+          "type": "string",
+          "title": "Medium Icon",
+          "x-ms-dataverse-attribute": "medium_icon",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "MediumIcon",
+          "x-ms-read-only": true
+        },
+        "mediumicon_name": {
+          "type": "string",
+          "title": "mediumicon_name",
+          "x-ms-dataverse-attribute": "mediumicon_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "MediumIcon_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "minclientversion": {
+          "type": "string",
+          "title": "minclientversion",
+          "x-ms-dataverse-attribute": "minclientversion",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "MinClientVersion",
+          "maxLength": 100
+        },
+        "name": {
+          "type": "string",
+          "title": "CanvasApp Name",
+          "x-ms-dataverse-attribute": "name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "Name",
+          "x-ms-dataverse-primary-name": true,
+          "required": true,
+          "maxLength": 100
+        },
+        "overwritetime": {
+          "type": "string",
+          "title": "Record Overwrite Time",
+          "x-ms-dataverse-attribute": "overwritetime",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "OverwriteTime",
+          "x-ms-read-only": true,
+          "required": true
+        },
+        "ownerid": {
+          "type": "string",
+          "title": "Owner",
+          "x-ms-dataverse-attribute": "ownerid",
+          "x-ms-dataverse-type": "OwnerType",
+          "x-ms-schema-name": "OwnerId",
+          "required": true
+        },
+        "owneridname": {
+          "type": "string",
+          "title": "owneridname",
+          "x-ms-dataverse-attribute": "owneridname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "OwnerIdName",
+          "x-ms-read-only": true,
+          "required": true,
+          "maxLength": 100
+        },
+        "owneridtype": {
+          "type": "string",
+          "title": "owneridtype",
+          "x-ms-dataverse-attribute": "owneridtype",
+          "x-ms-dataverse-type": "EntityNameType",
+          "x-ms-schema-name": "OwnerIdType",
+          "required": true
+        },
+        "owningbusinessunit": {
+          "type": "string",
+          "title": "Owning Business Unit",
+          "x-ms-dataverse-attribute": "owningbusinessunit",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "OwningBusinessUnit",
+          "x-ms-read-only": true
+        },
+        "owningbusinessunitname": {
+          "type": "string",
+          "title": "owningbusinessunitname",
+          "x-ms-dataverse-attribute": "owningbusinessunitname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "OwningBusinessUnitName",
+          "x-ms-read-only": true,
+          "maxLength": 100
+        },
+        "owningteam": {
+          "type": "string",
+          "title": "Owning Team",
+          "x-ms-dataverse-attribute": "owningteam",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "OwningTeam",
+          "x-ms-read-only": true
+        },
+        "owninguser": {
+          "type": "string",
+          "title": "Owning User",
+          "x-ms-dataverse-attribute": "owninguser",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "OwningUser",
+          "x-ms-read-only": true
+        },
+        "publisher": {
+          "type": "string",
+          "title": "publisher",
+          "x-ms-dataverse-attribute": "publisher",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "Publisher",
+          "maxLength": 2000
+        },
+        "small_icon": {
+          "type": "string",
+          "title": "Small Icon",
+          "x-ms-dataverse-attribute": "small_icon",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "SmallIcon",
+          "x-ms-read-only": true
+        },
+        "smallicon_name": {
+          "type": "string",
+          "title": "smallicon_name",
+          "x-ms-dataverse-attribute": "smallicon_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "SmallIcon_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "solutionid": {
+          "type": "string",
+          "title": "Solution",
+          "x-ms-dataverse-attribute": "solutionid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "SolutionId",
+          "x-ms-read-only": true,
+          "required": true
+        },
+        "status": {
+          "type": "string",
+          "title": "Status",
+          "x-ms-dataverse-attribute": "status",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "Status",
+          "maxLength": 2000
+        },
+        "supportingsolutionid": {
+          "type": "string",
+          "title": "Solution",
+          "x-ms-dataverse-attribute": "supportingsolutionid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "SupportingSolutionId",
+          "x-ms-read-only": true
+        },
+        "tags": {
+          "type": "string",
+          "title": "tags",
+          "x-ms-dataverse-attribute": "tags",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "Tags",
+          "maxLength": 2000
+        },
+        "teams_icon": {
+          "type": "string",
+          "title": "Teams Icon",
+          "x-ms-dataverse-attribute": "teams_icon",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "TeamsIcon",
+          "x-ms-read-only": true
+        },
+        "teamsicon_name": {
+          "type": "string",
+          "title": "teamsicon_name",
+          "x-ms-dataverse-attribute": "teamsicon_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "TeamsIcon_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "uniquecanvasappid": {
+          "type": "string",
+          "title": "Unique CanvasApp Id",
+          "x-ms-dataverse-attribute": "uniquecanvasappid",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "UniqueCanvasAppId",
+          "maxLength": 100
+        },
+        "versionnumber": {
+          "type": "string",
+          "title": "versionnumber",
+          "x-ms-dataverse-attribute": "versionnumber",
+          "x-ms-dataverse-type": "BigIntType",
+          "x-ms-schema-name": "VersionNumber",
+          "x-ms-read-only": true
+        },
+        "wide_icon": {
+          "type": "string",
+          "title": "Wide Icon",
+          "x-ms-dataverse-attribute": "wide_icon",
+          "x-ms-dataverse-type": "FileType",
+          "x-ms-schema-name": "WideIcon",
+          "x-ms-read-only": true
+        },
+        "wideicon_name": {
+          "type": "string",
+          "title": "wideicon_name",
+          "x-ms-dataverse-attribute": "wideicon_name",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "WideIcon_Name",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "aadlastmodifiedbyid",
+        "aadlastpublishedbyid",
+        "appversion",
+        "canvasappid",
+        "canvasapprowid",
+        "componentstate",
+        "iscustomizable",
+        "ismanaged",
+        "name",
+        "overwritetime",
+        "ownerid",
+        "owneridname",
+        "owneridtype",
+        "solutionid"
+      ]
+    }
+  }
+}
