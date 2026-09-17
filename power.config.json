@@ -1,6 +1,6 @@
 {
   "appId": "",
-  "appDisplayName": "Platform Analytics",
+  "appDisplayName": "Environment Analytics",
   "description": "Read-only health dashboard for a Power Platform environment: flows, apps, agents, solutions and users",
   "environmentId": "",
   "buildPath": "./dist",

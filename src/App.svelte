@@ -88,7 +88,7 @@
   $effect(() => {
     const path = $location;
     currentPath = path;
-    document.title = `${titleFor(path)} · Platform Analytics`;
+    document.title = `${titleFor(path)} · Environment Analytics`;
     const saved = scrollByPath.get(path) ?? 0;
     queueMicrotask(() => {
       if (!mainEl) return;

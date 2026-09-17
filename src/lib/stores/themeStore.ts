@@ -4,7 +4,7 @@ import { applyChartMode } from '$lib/utils/chartTheme';
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type ThemeMode = 'light' | 'dark';
 
-const STORAGE_KEY = 'platform-analytics:theme';
+const STORAGE_KEY = 'environment-analytics:theme';
 
 function readPreference(): ThemePreference {
   try {

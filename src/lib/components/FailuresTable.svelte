@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import { recentFailures, parseDuration, getFlowId } from '$lib/stores/flowSessionStore';
   import { flowNameMap } from '$lib/stores/flowStore';
   import { getFlowRunUrl } from '$lib/stores/powerContext';
@@ -15,7 +17,10 @@
   let dialogEl: HTMLDialogElement;
 
   // --- Filters ---
-  let statusFilter = $state<'all' | 'failed' | 'cancelled'>('failed');
+  // The dashboard links here with a filter, e.g. #/failures?status=failed
+  let statusFilter = $state<'all' | 'failed' | 'cancelled'>(
+    filterParam($querystring, 'status', ['all', 'failed', 'cancelled'] as const, 'failed')
+  );
   let searchQuery = $state('');
 
   let filteredFailures = $derived(() => {

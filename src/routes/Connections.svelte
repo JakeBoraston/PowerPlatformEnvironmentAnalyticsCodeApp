@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import {
     connectionReferences, connectionReferencesLoading, connectionReferencesError,
     connectionReferenceCount, connectorUsage, orphanedConnectionReferences,
@@ -22,7 +24,9 @@
   let error = $derived($connectionReferencesError);
 
   let searchQuery = $state('');
-  let rowFilter = $state<'all' | 'orphaned' | 'unsolutioned'>('all');
+  let rowFilter = $state<'all' | 'orphaned' | 'unsolutioned'>(
+    filterParam($querystring, 'show', ['all', 'orphaned', 'unsolutioned'] as const, 'all')
+  );
 
   let orphanedIds = $derived(new Set($orphanedConnectionReferences.map((r) => r.connectionreferenceid)));
   let unsolutionedIds = $derived(new Set($unsolutionedConnectionReferences.map((r) => r.connectionreferenceid)));

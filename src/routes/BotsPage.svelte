@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import {
     bots, botsLoading, botsError, botCount,
     activeBots, draftBots, fetchBots
@@ -11,7 +13,7 @@
   import {
     conversations, conversationsLoading, conversationsError, conversationCount, conversationsByBot
   } from '$lib/stores/conversationStore';
-  import { userNameMap, resolveOwnerName } from '$lib/stores/userStore';
+  import { userNameMap, resolveOwnerName, disabledOwnerIds, isOwnedByDisabledUser } from '$lib/stores/userStore';
   import { getAgentUrl } from '$lib/stores/powerContext';
   import { formatDate } from '$lib/utils/dateUtils';
   import ExternalLinkButton from '$lib/components/ui/ExternalLinkButton.svelte';
@@ -42,7 +44,12 @@
 
   // --- Filters ---
   let searchQuery = $state('');
-  let statusFilter = $state<'all' | 'active' | 'draft'>('all');
+  let statusFilter = $state<'all' | 'active' | 'draft' | 'unpublished'>(
+    filterParam($querystring, 'status', ['all', 'active', 'draft', 'unpublished'] as const, 'all')
+  );
+  let ownerFilter = $state<'all' | 'disabled'>(
+    filterParam($querystring, 'owner', ['all', 'disabled'] as const, 'all')
+  );
 
   let filteredBots = $derived(
     $bots.filter((bot) => {
@@ -52,6 +59,8 @@
       if (q && !name.includes(q) && !owner.includes(q)) return false;
       if (statusFilter === 'active' && bot.statecode !== 0) return false;
       if (statusFilter === 'draft' && bot.statecode === 0) return false;
+      if (statusFilter === 'unpublished' && bot.publishedon) return false;
+      if (ownerFilter === 'disabled' && !isOwnedByDisabledUser(bot as never, $disabledOwnerIds)) return false;
       return true;
     })
   );
@@ -149,8 +158,13 @@
       <SearchField placeholder="Search name or owner…" bind:value={searchQuery} />
       <FilterSelect
         label="Status"
-        options={[{ value: 'all', label: 'All statuses' }, { value: 'active', label: 'Active only' }, { value: 'draft', label: 'Draft only' }]}
+        options={[{ value: 'all', label: 'All statuses' }, { value: 'active', label: 'Active only' }, { value: 'draft', label: 'Draft only' }, { value: 'unpublished', label: 'Never published' }]}
         bind:value={statusFilter}
+      />
+      <FilterSelect
+        label="Owner"
+        options={[{ value: 'all', label: 'All owners' }, { value: 'disabled', label: 'Disabled owners' }]}
+        bind:value={ownerFilter}
       />
       <span class="text-xs text-base-content/70 pb-2" aria-live="polite">{filteredBots.length} of {$botCount} agents</span>
     </div>

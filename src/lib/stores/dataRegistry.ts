@@ -24,6 +24,8 @@ type Loader = () => Promise<void>;
  * route mounts.
  */
 const routeData: Record<string, Loader[]> = {
+  // The dashboard's health checks read across the environment, so it loads the
+  // same sources the individual pages do.
   '/': [
     ensureWorkflowsLoaded,
     ensureFlowRunsLoaded,
@@ -32,6 +34,10 @@ const routeData: Record<string, Loader[]> = {
     ensureSolutionsLoaded,
     ensureBotsLoaded,
     ensureUsersLoaded,
+    ensureConnectionReferencesLoaded,
+    ensureEnvironmentVariablesLoaded,
+    ensureSolutionHistoryLoaded,
+    ensureSystemJobsLoaded,
   ],
   '/flows': [ensureWorkflowsLoaded, ensureFlowRunsLoaded],
   '/flows/:id': [ensureWorkflowsLoaded, ensureFlowRunsLoaded],

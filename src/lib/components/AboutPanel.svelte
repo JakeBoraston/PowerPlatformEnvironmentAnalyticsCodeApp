@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ChevronDown, Info } from 'lucide-svelte';
 
-  const STORAGE_KEY = 'platform-analytics:about-open';
+  const STORAGE_KEY = 'environment-analytics:about-open';
 
   // Open until the viewer closes it; after that it stays closed in this browser.
   function readOpen(): boolean {
@@ -32,7 +32,7 @@
   </summary>
   <div class="flex flex-col gap-2 mt-2 pl-[30px]">
     <p class="text-sm leading-relaxed">
-      Platform Analytics reads the system tables Dataverse already keeps for every environment:
+      Environment Analytics reads the system tables Dataverse already keeps for every environment:
       cloud flows and their run history, canvas and model-driven apps, solutions and their import
       history, Copilot Studio agents, connection references, environment variables, system jobs and
       users. Nothing is installed alongside it and nothing is written back. Every figure is

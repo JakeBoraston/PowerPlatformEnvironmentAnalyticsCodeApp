@@ -102,9 +102,9 @@
            briefly share the header with the toggle and overlap it. -->
       {#if isOpen}
         <div class="brand">
-          <span class="mark" aria-hidden="true">PA</span>
+          <span class="mark" aria-hidden="true">EA</span>
           <span class="brand-text">
-            <b>Platform</b>
+            <b>Environment</b>
             <i>Analytics</i>
           </span>
         </div>
@@ -176,8 +176,9 @@
     flex: 0 0 var(--w-closed);
     height: 100%;
     background: var(--rail);
-    transition: flex-basis 220ms cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: flex-basis;
+    /* Short: the width change re-lays out every chart beside it, so a long
+       animation reads as lag rather than polish. */
+    transition: flex-basis 120ms cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     z-index: var(--z-sticky);
     /* A flex item defaults to `min-width: auto`, which is its min-content width.
@@ -345,10 +346,6 @@
 
   .rail.closed .group-label { padding-block: 0.375rem 0; height: 0; }
 
-  .rail.open :where(.brand-text, .group-label, .text) {
-    transition: opacity 180ms ease-out 90ms;
-  }
-
   .rail.closed .link[data-tip]:where(:hover, :focus-visible)::after {
     content: attr(data-tip);
     position: fixed;
@@ -368,8 +365,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .rail,
-    .link,
-    .rail.open :where(.brand-text, .group-label, .text) {
+    .link {
       transition: none;
     }
   }

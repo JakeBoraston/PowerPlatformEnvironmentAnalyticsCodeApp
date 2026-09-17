@@ -10,6 +10,10 @@
   import { solutionCount, solutionsLoading, solutionsError, fetchSolutions } from '$lib/stores/solutionStore';
   import { botCount, botsLoading, botsError, fetchBots } from '$lib/stores/botStore';
   import { activeUsers, usersLoading, usersError, fetchUsers } from '$lib/stores/userStore';
+  import { connectionReferencesLoading, connectionReferencesError, fetchConnectionReferences } from '$lib/stores/connectionReferenceStore';
+  import { envVarsLoading, envVarsError, fetchEnvironmentVariables } from '$lib/stores/environmentVariableStore';
+  import { solutionHistoryLoading, solutionHistoryError, fetchSolutionHistory } from '$lib/stores/solutionHistoryStore';
+  import { systemJobsLoading, systemJobsError, fetchSystemJobs } from '$lib/stores/systemJobStore';
   import { dashboardTimeRange } from '$lib/stores/dashboardFilters';
   import { formatDurationSeconds } from '$lib/utils/dateUtils';
   import KpiCard from '$lib/components/KpiCard.svelte';
@@ -29,8 +33,8 @@
   import WeeklyTrendChart from '$lib/components/charts/WeeklyTrendChart.svelte';
 
   // Platform charts
-  import EnvironmentHealthRadar from '$lib/components/charts/EnvironmentHealthRadar.svelte';
   import PlatformTreemap from '$lib/components/charts/PlatformTreemap.svelte';
+  import EnvironmentHealth from '$lib/components/EnvironmentHealth.svelte';
 
   import {
     Activity, CheckCircle, XCircle, Ban, Clock, Workflow,
@@ -43,6 +47,7 @@
   let sourceStates = $derived([
     $flowRunsLoading, $workflowsLoading, $canvasAppsLoading, $modelAppsLoading,
     $solutionsLoading, $botsLoading, $usersLoading,
+    $connectionReferencesLoading, $envVarsLoading, $solutionHistoryLoading, $systemJobsLoading,
   ]);
   let totalSources = $derived(sourceStates.length);
   let loadedSources = $derived(sourceStates.filter((loading) => !loading).length);
@@ -63,6 +68,10 @@
       { name: 'Solutions', error: $solutionsError, retry: fetchSolutions },
       { name: 'Agents', error: $botsError, retry: fetchBots },
       { name: 'Users', error: $usersError, retry: fetchUsers },
+      { name: 'Connection references', error: $connectionReferencesError, retry: fetchConnectionReferences },
+      { name: 'Environment variables', error: $envVarsError, retry: fetchEnvironmentVariables },
+      { name: 'Solution history', error: $solutionHistoryError, retry: fetchSolutionHistory },
+      { name: 'System jobs', error: $systemJobsError, retry: fetchSystemJobs },
     ].filter((source) => source.error)
   );
 
@@ -84,7 +93,7 @@
 
 <div class="flex flex-col gap-6 p-4 md:p-6 bg-base-100">
   <PageHeader
-    title="Platform Analytics"
+    title="Environment Analytics"
     subtitle="Power Platform environment overview"
     refreshLabel="flow runs"
     refreshing={isLoading}
@@ -160,7 +169,7 @@
       <KpiCard label="Active Users" value={tile($usersLoading, $usersError, $activeUsers.length)} icon={Users} />
     </div>
 
-    <EnvironmentHealthRadar />
+    <EnvironmentHealth />
 
     <!-- ═══════════════════ FLOW ANALYTICS ═══════════════════ -->
     <div class="border-t border-base-300 pt-4 flex items-center gap-3 mt-2">

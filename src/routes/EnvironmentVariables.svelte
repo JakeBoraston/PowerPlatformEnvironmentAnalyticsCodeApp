@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import {
     envVarRows, envVarCount, unresolvedEnvVarCount,
     envVarsLoading, envVarsError, fetchEnvironmentVariables,
@@ -15,7 +17,9 @@
   let error = $derived($envVarsError);
 
   let searchQuery = $state('');
-  let statusFilter = $state<'all' | 'unresolved' | 'overridden' | 'default'>('all');
+  let statusFilter = $state<'all' | 'unresolved' | 'overridden' | 'default'>(
+    filterParam($querystring, 'status', ['all', 'unresolved', 'overridden', 'default'] as const, 'all')
+  );
 
   let overriddenCount = $derived($envVarRows.filter((r) => r.overridden).length);
   let managedCount = $derived($envVarRows.filter((r) => r.isManaged).length);

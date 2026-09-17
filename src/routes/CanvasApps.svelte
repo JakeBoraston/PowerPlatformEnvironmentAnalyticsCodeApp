@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import {
     canvasApps, canvasAppsLoading, canvasAppsError, canvasAppCount,
     publishedCanvasApps, staleCanvasApps, managedCanvasApps,
     unmanagedCanvasApps, canvasAppsByOwner, fetchCanvasApps, isSystemApp
   } from '$lib/stores/canvasAppStore';
-  import { userNameMap, resolveOwnerName } from '$lib/stores/userStore';
+  import { userNameMap, resolveOwnerName, disabledOwnerIds, isOwnedByDisabledUser } from '$lib/stores/userStore';
   import { isTruthy } from '$lib/utils/dataverse';
   import { formatDate } from '$lib/utils/dateUtils';
   import KpiCard from '$lib/components/KpiCard.svelte';
@@ -29,7 +31,15 @@
   // --- Filters ---
   let searchQuery = $state('');
   let managedFilter = $state<'all' | 'managed' | 'unmanaged'>('all');
-  let typeFilter = $state<'all' | 'system' | 'custom'>('all');
+  let typeFilter = $state<'all' | 'system' | 'custom'>(
+    filterParam($querystring, 'type', ['all', 'system', 'custom'] as const, 'all')
+  );
+  let ownerFilter = $state<'all' | 'disabled'>(
+    filterParam($querystring, 'owner', ['all', 'disabled'] as const, 'all')
+  );
+  let staleFilter = $state<'all' | 'only'>(
+    filterParam($querystring, 'stale', ['all', 'only'] as const, 'all')
+  );
 
   let filteredApps = $derived(
     $canvasApps.filter((app) => {
@@ -41,6 +51,8 @@
       if (managedFilter === 'unmanaged' && isTruthy(app.ismanaged)) return false;
       if (typeFilter === 'system' && !isSystemApp(app)) return false;
       if (typeFilter === 'custom' && isSystemApp(app)) return false;
+      if (ownerFilter === 'disabled' && !isOwnedByDisabledUser(app as never, $disabledOwnerIds)) return false;
+      if (staleFilter === 'only' && !isStale(app)) return false;
       return true;
     })
   );
@@ -104,6 +116,16 @@
         label="Origin"
         options={[{ value: 'all', label: 'All' }, { value: 'system', label: 'System / Microsoft' }, { value: 'custom', label: 'Custom' }]}
         bind:value={typeFilter}
+      />
+      <FilterSelect
+        label="Owner"
+        options={[{ value: 'all', label: 'All owners' }, { value: 'disabled', label: 'Disabled owners' }]}
+        bind:value={ownerFilter}
+      />
+      <FilterSelect
+        label="Last changed"
+        options={[{ value: 'all', label: 'Any' }, { value: 'only', label: 'Over 90 days ago' }]}
+        bind:value={staleFilter}
       />
       <span class="text-xs text-base-content/70 pb-2" aria-live="polite">{filteredApps.length} of {$canvasAppCount} apps</span>
     </div>

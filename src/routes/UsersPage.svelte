@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import { isTruthy } from '$lib/utils/dataverse';
   import {
     users, usersLoading, usersError, userCount,
@@ -18,7 +20,9 @@
 
   // --- Filters ---
   let searchQuery = $state('');
-  let statusFilter = $state<'all' | 'active' | 'disabled'>('all');
+  let statusFilter = $state<'all' | 'active' | 'disabled'>(
+    filterParam($querystring, 'status', ['all', 'active', 'disabled'] as const, 'all')
+  );
 
   let filteredUsers = $derived(
     $users.filter((user) => {

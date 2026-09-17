@@ -3,7 +3,8 @@
 ## Overview
 
 Svelte 5 Code App that provides an analytical dashboard for a Power Platform
-environment. Branded **"Platform Analytics"** in the UI. It started
+environment. Branded **"Environment Analytics"** in the UI (sidebar + dashboard
+heading) — the folder name `FlowAnalytics` predates the broader scope. It started
 as a Power Automate flow-run dashboard and now also covers Canvas Apps, Model
 (model-driven) Apps, Copilot Studio agents, Solutions, and environment Users.
 

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import {
     solutionHistory, solutionHistoryLoading, solutionHistoryError,
     solutionHistoryCount, failedOperationCount, operationsBySolution,
@@ -18,7 +20,9 @@
   let error = $derived($solutionHistoryError);
 
   let searchQuery = $state('');
-  let resultFilter = $state<'all' | 'failed' | 'succeeded'>('all');
+  let resultFilter = $state<'all' | 'failed' | 'succeeded'>(
+    filterParam($querystring, 'result', ['all', 'failed', 'succeeded'] as const, 'all')
+  );
 
   let solutionsTouched = $derived($operationsBySolution.length);
 

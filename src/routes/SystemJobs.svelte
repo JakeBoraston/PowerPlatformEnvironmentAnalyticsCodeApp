@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { querystring } from 'svelte-spa-router';
+  import { filterParam } from '$lib/utils/filterParam';
   import {
     systemJobs, systemJobsLoading, systemJobsError, systemJobCount,
     failedSystemJobCount, inFlightSystemJobs, systemJobSuccessRate,
@@ -18,7 +20,9 @@
   let error = $derived($systemJobsError);
 
   let searchQuery = $state('');
-  let statusFilter = $state<'all' | 'failed' | 'inflight'>('failed');
+  let statusFilter = $state<'all' | 'failed' | 'inflight'>(
+    filterParam($querystring, 'status', ['all', 'failed', 'inflight'] as const, 'failed')
+  );
   let selectedMessage = $state<{ job: string; text: string } | null>(null);
   let messageDialog: HTMLDialogElement;
 
