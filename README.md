@@ -221,10 +221,6 @@ Requires Node.js 20.19 or later (the minimum for Vite 7).
    specific solution; without it the first push uses the environment's
    preferred solution.
 
-To move the app on from there (development to test to production), add it to a
-solution and promote that solution with export and import or Power Platform
-Pipelines.
-
 ## Local development
 
 ```bash
