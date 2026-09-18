@@ -25,7 +25,10 @@ export function formatDurationSeconds(secs: number): string {
   if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes}m`;
+  if (hours < 24) return `${hours}h ${remainingMinutes}m`;
+  // Runs waiting on an approval can sit for up to 30 days.
+  const days = Math.floor(hours / 24);
+  return `${days}d ${hours % 24}h`;
 }
 
 /**

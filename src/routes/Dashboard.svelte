@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     totalRuns, succeededRuns, failedRuns, cancelledRuns,
-    averageDuration, flowRunsLoading, flowRunsError, flowRunsCapped,
+    typicalDuration, longWaitRunCount, flowRunsLoading, flowRunsError, flowRunsCapped,
     fetchFlowRuns, ensureFlowRunsForRange, FLOW_RUN_LIMIT,
   } from '$lib/stores/flowSessionStore';
   import { activeFlowCount, workflowsLoading, workflowsError, fetchWorkflows } from '$lib/stores/flowStore';
@@ -182,7 +182,12 @@
       <KpiCard label="Succeeded" value={tile(false, $flowRunsError, $succeededRuns.length)} icon={CheckCircle} tone="good" />
       <KpiCard label="Failed" value={tile(false, $flowRunsError, $failedRuns.length)} icon={XCircle} tone="bad" />
       <KpiCard label="Cancelled" value={tile(false, $flowRunsError, $cancelledRuns.length)} icon={Ban} tone="warn" />
-      <KpiCard label="Avg Duration" value={tile(false, $flowRunsError, formatDurationSeconds($averageDuration))} icon={Clock} />
+      <KpiCard
+        label="Typical Duration"
+        value={tile(false, $flowRunsError, formatDurationSeconds($typicalDuration))}
+        subtitle={$longWaitRunCount > 0 ? `Median run. ${$longWaitRunCount} waited over a day.` : 'Median run'}
+        icon={Clock}
+      />
       <KpiCard label="Active Flows" value={tile(false, $workflowsError, $activeFlowCount)} icon={Workflow} />
     </div>
 

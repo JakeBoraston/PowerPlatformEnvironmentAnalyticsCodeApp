@@ -31,10 +31,17 @@ function isUnsuccessful(status: string | undefined): boolean {
   return status === 'Failed' || status === 'Cancelled';
 }
 
+/**
+ * A run's duration in seconds.
+ *
+ * `flowrun.duration` is stored in milliseconds: across real runs it is a
+ * thousand times the gap between `starttime` and `endtime`. Every consumer
+ * reads it through here, so nothing downstream handles milliseconds.
+ */
 function parseDuration(val: string | number | undefined): number {
   if (val === undefined || val === '') return 0;
-  const n = Number(val);
-  return isNaN(n) ? 0 : n;
+  const ms = Number(val);
+  return isNaN(ms) ? 0 : ms / 1000;
 }
 
 function getFlowId(run: Flowruns): string {
@@ -78,14 +85,33 @@ export const successRate = derived(
   }
 );
 
-/** Average duration in seconds. */
-export const averageDuration = derived(flowRuns, ($r) => {
-  const withDuration = $r
-    .map((r) => parseDuration(r.duration))
-    .filter((d) => d > 0);
-  if (withDuration.length === 0) return 0;
-  return Math.round(withDuration.reduce((sum, d) => sum + d, 0) / withDuration.length);
-});
+/** A run longer than this was waiting on something, usually an approval. */
+export const LONG_WAIT_SECONDS = 24 * 60 * 60;
+
+/** Durations in seconds for the runs that recorded one. */
+export function runDurations(runs: Flowruns[]): number[] {
+  return runs.map((r) => parseDuration(r.duration)).filter((d) => d > 0);
+}
+
+/**
+ * The typical run time. A median rather than a mean, because a handful of runs
+ * left waiting for days on an approval would otherwise turn a ten-second flow
+ * into an hour-long "average".
+ */
+export function medianOf(values: number[]): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** Median run time in seconds across the period. */
+export const typicalDuration = derived(flowRuns, ($r) => medianOf(runDurations($r)));
+
+/** Runs that took longer than a day, i.e. sat waiting rather than running. */
+export const longWaitRunCount = derived(flowRuns, ($r) =>
+  runDurations($r).filter((d) => d > LONG_WAIT_SECONDS).length
+);
 
 /** Flow runs grouped by workflow ID. */
 export const runsByFlow = derived(flowRuns, ($r) => {

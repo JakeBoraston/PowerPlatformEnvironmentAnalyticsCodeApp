@@ -49,12 +49,12 @@ red for failed.
 - **How this app works** panel explaining where the data comes from and the security role to use (collapsible, remembers its state)
 - Platform tiles: canvas apps, model-driven apps, solutions, agents and active users
 - **Environment health**: fourteen checks over the environment, ranked, each with a count, what to do about it and a link to the records behind it. Unresolved environment variables, flows that have never succeeded, failed runs, failed solution operations and failed system jobs come first; then orphaned connection references, references outside a solution, flows binding connectors directly and assets owned by disabled users; then housekeeping such as flows that have not run, stale canvas apps and agents never published
-- Flow run tiles: total, succeeded, failed, cancelled, average duration and active flows
+- Flow run tiles: total, succeeded, failed, cancelled, typical (median) run time with a count of runs that waited over a day, and active flows
 - **Runs Over Time** by status, and a **Success Rate** gauge
 - **Flow Activity by Day & Hour** heatmap showing when flows run
 - **Runs by Status**, **Weekly Status Trend**, **Failures by Flow**
-- **Optimisation Targets**: flows plotted by run count against average duration, sized by total time and coloured by failure rate
-- **Avg Duration (Top 10 Slowest)** flows
+- **Optimisation Targets**: flows plotted by run count against median run time, sized by total time spent and coloured by failure rate
+- **Slowest Flows**, by median run time
 - **Platform Inventory** treemap of flows, apps, solutions, agents and users
 - Time range of 7, 14 or 28 days
 - If a data source can't load (missing permissions, or no Copilot Studio in the environment), it is named with the reason and a **Try again** button, and its tiles show a dash rather than a misleading zero
@@ -71,7 +71,7 @@ red for failed.
 
 ![Flow detail](docs/images/flow-detail.png)
 
-- Run tiles: total, succeeded, failed, cancelled and average duration
+- Run tiles: total, succeeded, failed, cancelled and typical (median) run time
 - Run trend over the period, and a day-and-hour heatmap for this flow
 - Run history filtered by result, with start and end times, duration, trigger and error
 - Links to the flow and to each run in Power Automate

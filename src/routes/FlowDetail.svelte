@@ -2,6 +2,7 @@
   import { workflows, workflowsLoading, workflowsError, fetchWorkflows } from '$lib/stores/flowStore';
   import {
     runsByFlow, parseDuration, isFailure, isCancelled,
+    runDurations, medianOf, LONG_WAIT_SECONDS,
     flowRunsLoading, flowRunsError, fetchFlowRuns,
   } from '$lib/stores/flowSessionStore';
   import { getFlowRunUrl, getFlowUrl } from '$lib/stores/powerContext';
@@ -29,11 +30,9 @@
   let succeeded = $derived(runs.filter((r) => r.status === 'Succeeded').length);
   let failed = $derived(runs.filter((r) => isFailure(r.status)).length);
   let cancelled = $derived(runs.filter((r) => isCancelled(r.status)).length);
-  let avgDuration = $derived(() => {
-    const durations = runs.map((r) => parseDuration(r.duration)).filter((d) => d > 0);
-    if (durations.length === 0) return 0;
-    return Math.round(durations.reduce((sum, d) => sum + d, 0) / durations.length);
-  });
+  let durations = $derived(runDurations(runs));
+  let typicalDuration = $derived(medianOf(durations));
+  let longWaits = $derived(durations.filter((d) => d > LONG_WAIT_SECONDS).length);
 
   let activeTab = $state<'all' | 'succeeded' | 'failed' | 'cancelled'>('all');
 
@@ -107,7 +106,12 @@
       <KpiCard label="Succeeded" value={succeeded} icon={CheckCircle} tone="good" />
       <KpiCard label="Failed" value={failed} icon={XCircle} tone="bad" />
       <KpiCard label="Cancelled" value={cancelled} icon={Ban} tone="warn" />
-      <KpiCard label="Avg Duration" value={formatDurationSeconds(avgDuration())} icon={Clock} />
+      <KpiCard
+        label="Typical Duration"
+        value={formatDurationSeconds(typicalDuration)}
+        subtitle={longWaits > 0 ? `Median run. ${longWaits} waited over a day.` : 'Median run'}
+        icon={Clock}
+      />
     </div>
 
     <FlowRunTrendChart {runs} flowName={flow.name ?? 'Flow'} {days} />

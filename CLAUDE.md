@@ -39,7 +39,7 @@ Each store owns one table via its generated service:
 | Store | Service / Table | Notes |
 |---|---|---|
 | `flowStore` | `WorkflowsService` (`workflow`) | Cloud flows — filter `category eq 5` |
-| `flowSessionStore` | `FlowrunsService` (`flowrun`, **elastic**) | Run records. Paginates via `skipToken` (cap 20 pages × 5000). `status` is a **string** ('Succeeded' / 'Failed' / 'Cancelled' / 'Running' / 'Waiting'), `duration` is **seconds**. Filtered by `starttime ge {cutoff}` from the dashboard time range. |
+| `flowSessionStore` | `FlowrunsService` (`flowrun`, **elastic**) | Run records. Paginates via `skipToken` (cap 20 pages × 5000). `status` is a **string** ('Succeeded' / 'Failed' / 'Cancelled' / 'Running' / 'Waiting'), `duration` is **milliseconds** (about 1,000 times `endtime - starttime`); always read it through `parseDuration`, which returns seconds. Filtered by `starttime ge {cutoff}` from the dashboard time range. |
 | `canvasAppStore` | `CanvasappsService` (`canvasapp`) | Owners use AAD object IDs (see `resolveOwnerName`) |
 | `modelAppStore` | `AppmodulesService` (`appmodule`) | Model-driven apps |
 | `solutionStore` | `SolutionsService` (`solution`) | |
@@ -114,7 +114,7 @@ The baseline is **0 errors, 0 warnings**; keep it there.
 
 | Route | Page | Description |
 |-------|------|-------------|
-| `/` | `Dashboard` | Platform overview KPIs + env-health radar, then flow KPIs and charts (runs over time, success rate, **ActivityHeatmap**, status, weekly trend, optimisation scatter, duration, failures), then ownership graph + platform treemap |
+| `/` | `Dashboard` | Platform overview KPIs + environment health checks, then flow KPIs and charts (runs over time, success rate, **ActivityHeatmap**, status, weekly trend, optimisation scatter, duration, failures), then ownership graph + platform treemap |
 | `/flows` | `Flows` | All cloud flows with per-flow run stats (`FlowsTable`) |
 | `/flows/:id` | `FlowDetail` | One flow — KPIs, run-trend chart, **per-flow ActivityHeatmap**, "Open in Power Automate" link, tabbed run history with per-run links |
 | `/failures` | `Failures` | Failed + cancelled runs with error-detail dialog (`FailuresTable`) |

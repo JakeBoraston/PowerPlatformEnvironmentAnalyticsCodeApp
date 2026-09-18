@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ScatterChart, Tooltip } from 'layerchart';
   import { status, theme } from '$lib/utils/chartTheme';
-  import { runsByFlow } from '$lib/stores/flowSessionStore';
+  import { runsByFlow, parseDuration, medianOf } from '$lib/stores/flowSessionStore';
   import { flowNameMap } from '$lib/stores/flowStore';
   import { formatDurationSeconds } from '$lib/utils/dateUtils';
   import ChartFrame, { type ChartColumn } from './ChartFrame.svelte';
@@ -32,15 +32,17 @@
       const count = runs.length;
       if (count === 0) return;
 
-      let totalDur = 0;
-      let durCount = 0;
+      const durations: number[] = [];
       let failCount = 0;
       runs.forEach((r) => {
-        const dur = Number(r.duration);
-        if (dur > 0) { totalDur += dur; durCount++; }
+        const dur = parseDuration(r.duration);
+        if (dur > 0) durations.push(dur);
         if (r.status === 'Failed' || r.status === 'Cancelled') failCount++;
       });
-      const avgDur = durCount > 0 ? Math.round(totalDur / durCount) : 0;
+      // Median, so a few runs left waiting on an approval don't make a quick
+      // flow look slow. Total time still counts them: that time was spent.
+      const avgDur = medianOf(durations);
+      const totalDur = durations.reduce((sum, d) => sum + d, 0);
       const failRate = Math.round((failCount / count) * 100);
 
       data.push({
@@ -48,8 +50,8 @@
         runs: count,
         avgDur,
         failRate,
-        // Dot size tracks total time spent: runs x duration.
-        cost: Math.sqrt(count * avgDur),
+        // Dot size tracks total time spent across every run.
+        cost: Math.sqrt(totalDur),
         band: bandFor(failRate),
       });
     });
@@ -72,7 +74,7 @@
   const columns: ChartColumn[] = [
     { key: 'name', label: 'Flow' },
     { key: 'runs', label: 'Runs' },
-    { key: 'avgDur', label: 'Avg duration' },
+    { key: 'avgDur', label: 'Median duration' },
     { key: 'failRate', label: 'Failure rate' },
   ];
 
@@ -90,7 +92,7 @@
   let summary = $derived.by(() => {
     if (points.length === 0) return '';
     const top = [...points].sort((a, b) => b.cost - a.cost)[0];
-    return `${points.length} flows plotted by run count against average duration. The biggest time cost is ${top.name}: ${top.runs} runs averaging ${formatDurationSeconds(top.avgDur)}.`;
+    return `${points.length} flows plotted by run count against median run time. The biggest time cost is ${top.name}: ${top.runs} runs, typically ${formatDurationSeconds(top.avgDur)} each.`;
   });
 </script>
 
@@ -118,7 +120,7 @@
     props={{
       points: { fillOpacity: 0.8 },
       xAxis: { label: 'Run count', format: 'integer' },
-      yAxis: { label: 'Avg duration', format: (v: number) => formatDurationSeconds(v) },
+      yAxis: { label: 'Median duration', format: (v: number) => formatDurationSeconds(v) },
     }}
   >
     {#snippet tooltip()}
@@ -127,7 +129,7 @@
           <Tooltip.Header value={data.name} />
           <Tooltip.List>
             <Tooltip.Item label="Runs" value={data.runs} />
-            <Tooltip.Item label="Avg duration" value={formatDurationSeconds(data.avgDur)} />
+            <Tooltip.Item label="Median duration" value={formatDurationSeconds(data.avgDur)} />
             <Tooltip.Item label="Failure rate" value={`${data.failRate}%`} color={bandColours[data.band as Band]} />
           </Tooltip.List>
         {/snippet}
