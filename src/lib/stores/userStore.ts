@@ -40,7 +40,7 @@ export const userNameMap = derived(users, ($u) => {
 });
 
 /**
- * Every ID a disabled user can be referenced by. Owners are held as a Dataverse
+ * Every ID a disabled account can be referenced by. Owners are held as a Dataverse
  * user ID on some tables and an AAD object ID on others, so both are indexed.
  */
 export const disabledOwnerIds = derived(disabledUsers, ($disabled) => {
@@ -54,7 +54,7 @@ export const disabledOwnerIds = derived(disabledUsers, ($disabled) => {
   return ids;
 });
 
-/** True when the record's owner is a disabled user. */
+/** True when the record's owner account is disabled. */
 export function isOwnedByDisabledUser(
   record: { ownerid?: string; _owninguser_value?: string },
   ids: Set<string>,

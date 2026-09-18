@@ -3,7 +3,7 @@
  * `#/failures?status=failed`.
  *
  * The dashboard's health findings link to the records behind them, not just to
- * the page holding them: "12 flows are owned by a disabled user" opens Flows
+ * the page holding them: "12 flows are owned by a disabled account" opens Flows
  * already filtered to those flows. Each page reads its own filter here.
  */
 export function filterParam<T extends string>(

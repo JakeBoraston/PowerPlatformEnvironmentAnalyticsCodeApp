@@ -119,7 +119,7 @@
       />
       <FilterSelect
         label="Owner"
-        options={[{ value: 'all', label: 'All owners' }, { value: 'disabled', label: 'Disabled owners' }]}
+        options={[{ value: 'all', label: 'All owners' }, { value: 'disabled', label: 'Owner account disabled' }]}
         bind:value={ownerFilter}
       />
       <FilterSelect

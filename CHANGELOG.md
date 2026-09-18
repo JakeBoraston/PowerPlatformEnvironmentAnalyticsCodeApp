@@ -4,6 +4,21 @@ Notable changes to Environment Analytics. Each version below has a solution to
 import on the [Releases](https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalyticsCodeApp/releases)
 page; import a newer one over an older one to upgrade in place.
 
+## [1.2.0] - 2026-09-18
+
+### Added
+
+- **Suspended flows**, in environment health. Power Automate's own reason for
+  suspending each flow is quoted where it gave one.
+- **Flows that have gone quiet**, in environment health. When a trigger's
+  connection expires the flow doesn't fail, it simply stops running, so no
+  failed run is ever recorded. The app learns when each regular flow normally
+  runs, hour by hour across the week, and flags it once it has missed about
+  three runs it would normally have made. Nights and weekends don't count
+  against business-hours flows.
+- Filters on the Flows page for suspended flows and flows that have gone quiet,
+  and an explanation on the flow's own page when it has been flagged.
+
 ## [1.1.1] - 2026-09-18
 
 ### Fixed
@@ -39,5 +54,6 @@ First public release.
 - Accessibility: WCAG 2.2 AA contrast, visible labels, keyboard operation
   throughout.
 
+[1.2.0]: https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalyticsCodeApp/releases/tag/v1.2.0
 [1.1.1]: https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalyticsCodeApp/releases/tag/v1.1.1
 [1.1.0]: https://github.com/JakeBoraston/PowerPlatformEnvironmentAnalyticsCodeApp/releases/tag/v1.1.0

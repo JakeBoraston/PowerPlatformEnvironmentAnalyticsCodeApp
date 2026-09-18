@@ -85,8 +85,8 @@
             </td>
             <td class="text-sm">{resolveOwnerName(flow as any, nameMap)}</td>
             <td class="text-center">
-              <span class="pa-pill {flow.statecode === 1 ? 'pa-pill--ok' : 'pa-pill--idle'}">
-                {flow.statecode === 1 ? 'Active' : 'Inactive'}
+              <span class="pa-pill {flow.statecode === 1 ? 'pa-pill--ok' : flow.statecode === 2 ? 'pa-pill--bad' : 'pa-pill--idle'}">
+                {flow.statecode === 1 ? 'Active' : flow.statecode === 2 ? 'Suspended' : 'Inactive'}
               </span>
             </td>
             <td class="text-center">{stats.total}</td>

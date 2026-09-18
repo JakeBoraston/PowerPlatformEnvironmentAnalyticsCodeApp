@@ -153,6 +153,18 @@ Wiring:
 subscription.** A store missing from the registry will simply never load.
 Route keys support `:params` (`/flows/:id`).
 
+### Suspended and quiet flows (`stores/flowSignals.ts`)
+There is no connection health in the default tables: `connectioninstance` has a
+`connectionstatus` column but is empty, and `flowrun` records only a generic
+`ActionFailed`. An expired *trigger* connection records no run at all. So:
+- **Suspended**: `workflow.statecode === 2`, with Power Automate's reason in
+  `suspensionreasondetails`.
+- **Gone quiet**: each flow's runs give it a rate per hour of the week; the runs
+  it should have made since it last ran are summed over the silent hours, and it
+  is flagged at 3 or more. Only flows with 5+ runs on 5+ separate days are judged.
+  A "longest gap ever" rule was tried first and was useless (weekends set the gap,
+  so daily flows took 72h to flag); hour-of-week keeps nights and weekends at ~0.
+
 ### Reading tables: always page
 The SDK's `getAll` returns **one page of 500 rows** unless told otherwise
 (`odata.maxpagesize=500` in `dataverseDataOperationExecutor`), and `top` does not

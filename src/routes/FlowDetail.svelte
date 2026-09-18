@@ -8,11 +8,12 @@
   import { getFlowRunUrl, getFlowUrl } from '$lib/stores/powerContext';
   import { dashboardTimeRange } from '$lib/stores/dashboardFilters';
   import type { Flowruns } from '@models/FlowrunsModel';
-  import { formatDate, formatDateTime, formatDurationSeconds } from '$lib/utils/dateUtils';
+  import { formatDate, formatDateTime, formatDuration, formatDurationSeconds } from '$lib/utils/dateUtils';
   import FlowRunTrendChart from '$lib/components/charts/FlowRunTrendChart.svelte';
   import ActivityHeatmap from '$lib/components/charts/ActivityHeatmap.svelte';
   import KpiCard from '$lib/components/KpiCard.svelte';
-  import { CheckCircle, XCircle, Ban, Clock, Activity } from 'lucide-svelte';
+  import { CheckCircle, XCircle, Ban, Clock, Activity, TriangleAlert, CircleAlert } from 'lucide-svelte';
+  import { quietFlows, SUSPENDED_STATE } from '$lib/stores/flowSignals';
   import PageHeader from '$lib/components/ui/PageHeader.svelte';
   import LoadError from '$lib/components/ui/LoadError.svelte';
   import Spinner from '$lib/components/ui/Spinner.svelte';
@@ -30,6 +31,8 @@
   let succeeded = $derived(runs.filter((r) => r.status === 'Succeeded').length);
   let failed = $derived(runs.filter((r) => isFailure(r.status)).length);
   let cancelled = $derived(runs.filter((r) => isCancelled(r.status)).length);
+  let quiet = $derived($quietFlows.find((q) => q.workflowid === flowId));
+
   let durations = $derived(runDurations(runs));
   let typicalDuration = $derived(medianOf(durations));
   let longWaits = $derived(durations.filter((d) => d > LONG_WAIT_SECONDS).length);
@@ -101,6 +104,27 @@
       <a href="#/flows" class="link mt-2 inline-block">View all cloud flows</a>
     </div>
   {:else}
+    {#if flow.statecode === SUSPENDED_STATE}
+      <div role="alert" class="alert alert-error text-sm items-start">
+        <CircleAlert size={16} aria-hidden="true" class="mt-0.5" />
+        <div>
+          <p class="font-semibold">Power Automate has suspended this flow.</p>
+          <p>{flow.suspensionreasondetails || 'No reason was recorded. Open it in Power Automate to see why, fix the cause, then turn it back on.'}</p>
+        </div>
+      </div>
+    {:else if quiet}
+      <div role="status" class="alert alert-warning text-sm items-start">
+        <TriangleAlert size={16} aria-hidden="true" class="mt-0.5" />
+        <div>
+          <p class="font-semibold">This flow has gone quiet.</p>
+          <p>
+            Its last run started {formatDateTime(quiet.lastRun.toISOString())}, {formatDuration(quiet.silentFor)} ago. Going by
+            when it usually runs, it would normally have run about {Math.round(quiet.expectedRuns)} times since. An expired
+            connection on the trigger stops a flow without failing it, so check its connections in Power Automate.
+          </p>
+        </div>
+      </div>
+    {/if}
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
       <KpiCard label="Total Runs" value={totalCount} icon={Activity} />
       <KpiCard label="Succeeded" value={succeeded} icon={CheckCircle} tone="good" />

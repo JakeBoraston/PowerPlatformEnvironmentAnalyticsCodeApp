@@ -1,22 +1,10 @@
-/**
- * Format a duration in milliseconds to a human-readable string.
- */
+/** Format a duration in milliseconds, e.g. a gap between two timestamps. */
 export function formatDuration(ms: number): string {
-  if (ms < 1000) return `${ms}ms`;
-  const seconds = Math.floor(ms / 1000);
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes}m`;
+  if (ms < 1000) return `${Math.round(ms)}ms`;
+  return formatDurationSeconds(ms / 1000);
 }
 
-/**
- * Format a duration in seconds to a human-readable string.
- * (FlowRun table stores duration in seconds.)
- */
+/** Format a duration in seconds, e.g. a flow run's (see parseDuration). */
 export function formatDurationSeconds(secs: number): string {
   if (secs <= 0) return '0s';
   if (secs < 60) return `${Math.round(secs)}s`;

@@ -10,6 +10,7 @@
   import TimeRangeSelect from '$lib/components/TimeRangeSelect.svelte';
   import { fetchFlowRuns, flowRunsLoading, runsByFlow } from '$lib/stores/flowSessionStore';
   import PageHeader from '$lib/components/ui/PageHeader.svelte';
+  import { quietFlowIds, SUSPENDED_STATE } from '$lib/stores/flowSignals';
   import LoadError from '$lib/components/ui/LoadError.svelte';
   import Spinner from '$lib/components/ui/Spinner.svelte';
   import SearchField from '$lib/components/ui/SearchField.svelte';
@@ -21,14 +22,14 @@
 
   // --- Filters ---
   let searchQuery = $state('');
-  let stateFilter = $state<'all' | 'active' | 'inactive'>(
-    filterParam($querystring, 'state', ['all', 'active', 'inactive'] as const, 'all')
+  let stateFilter = $state<'all' | 'active' | 'inactive' | 'suspended'>(
+    filterParam($querystring, 'state', ['all', 'active', 'inactive', 'suspended'] as const, 'all')
   );
   let ownerFilter = $state<'all' | 'disabled'>(
     filterParam($querystring, 'owner', ['all', 'disabled'] as const, 'all')
   );
-  let runsFilter = $state<'all' | 'none'>(
-    filterParam($querystring, 'runs', ['all', 'none'] as const, 'all')
+  let runsFilter = $state<'all' | 'none' | 'quiet'>(
+    filterParam($querystring, 'runs', ['all', 'none', 'quiet'] as const, 'all')
   );
 
   let filteredFlows = $derived(
@@ -39,8 +40,10 @@
       if (q && !name.includes(q) && !owner.includes(q)) return false;
       if (stateFilter === 'active' && flow.statecode !== 1) return false;
       if (stateFilter === 'inactive' && flow.statecode === 1) return false;
+      if (stateFilter === 'suspended' && flow.statecode !== SUSPENDED_STATE) return false;
       if (ownerFilter === 'disabled' && !isOwnedByDisabledUser(flow as never, $disabledOwnerIds)) return false;
       if (runsFilter === 'none' && ($runsByFlow.get(flow.workflowid) ?? []).length > 0) return false;
+      if (runsFilter === 'quiet' && !$quietFlowIds.has(flow.workflowid)) return false;
       return true;
     })
   );
@@ -71,17 +74,17 @@
       <SearchField placeholder="Search name or owner…" bind:value={searchQuery} />
       <FilterSelect
         label="State"
-        options={[{ value: 'all', label: 'All states' }, { value: 'active', label: 'Active only' }, { value: 'inactive', label: 'Inactive only' }]}
+        options={[{ value: 'all', label: 'All states' }, { value: 'active', label: 'Active only' }, { value: 'inactive', label: 'Inactive only' }, { value: 'suspended', label: 'Suspended' }]}
         bind:value={stateFilter}
       />
       <FilterSelect
         label="Owner"
-        options={[{ value: 'all', label: 'All owners' }, { value: 'disabled', label: 'Disabled owners' }]}
+        options={[{ value: 'all', label: 'All owners' }, { value: 'disabled', label: 'Owner account disabled' }]}
         bind:value={ownerFilter}
       />
       <FilterSelect
         label="Runs"
-        options={[{ value: 'all', label: 'Any' }, { value: 'none', label: 'No runs in period' }]}
+        options={[{ value: 'all', label: 'Any' }, { value: 'none', label: 'No runs in period' }, { value: 'quiet', label: 'Gone quiet' }]}
         bind:value={runsFilter}
       />
       <span class="text-xs text-base-content/70 pb-2" aria-live="polite">{filteredFlows.length} of {$flowCount} flows ({$activeFlowCount} active)</span>

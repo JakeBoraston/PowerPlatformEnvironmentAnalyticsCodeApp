@@ -13,6 +13,7 @@ import {
 import { unresolvedEnvVarCount, envVarsError } from './environmentVariableStore';
 import { failedOperations, solutionHistoryError } from './solutionHistoryStore';
 import { failedSystemJobCount, systemJobsError } from './systemJobStore';
+import { quietFlows, suspendedFlows } from './flowSignals';
 
 export type CheckSeverity = 'critical' | 'attention' | 'housekeeping';
 export type CheckGroup = 'Breaking now' | 'Risk and hygiene' | 'Housekeeping';
@@ -57,6 +58,7 @@ export const healthChecks: Readable<HealthCheck[]> = derived(
     unresolvedEnvVarCount, envVarsError,
     failedOperations, solutionHistoryError,
     failedSystemJobCount, systemJobsError,
+    quietFlows, suspendedFlows,
   ],
   ([
     $workflows, $workflowsError,
@@ -69,6 +71,7 @@ export const healthChecks: Readable<HealthCheck[]> = derived(
     $unresolvedEnvVars, $envVarsError,
     $failedOperations, $solutionHistoryError,
     $failedSystemJobs, $systemJobsError,
+    $quietFlows, $suspendedFlows,
   ]) => {
     const activeFlows = $workflows.filter((flow) => flow.statecode === 1);
 
@@ -106,7 +109,33 @@ export const healthChecks: Readable<HealthCheck[]> = derived(
     const unpublishedAgents = $bots.filter((bot) => !bot.publishedon).length;
     const customStaleApps = $staleCanvasApps.filter((app) => !isSystemApp(app));
 
+    const suspendedReason = $suspendedFlows.find((flow) => flow.suspensionreasondetails)?.suspensionreasondetails;
+
     const checks: HealthCheck[] = [
+      {
+        id: 'suspended-flows',
+        group: 'Breaking now',
+        severity: 'critical',
+        title: `${$suspendedFlows.length} ${plural($suspendedFlows.length, 'flow is', 'flows are')} suspended`,
+        action: suspendedReason
+          ? `Power Automate turned ${plural($suspendedFlows.length, 'it', 'them')} off: ${suspendedReason}`
+          : `Power Automate turned ${plural($suspendedFlows.length, 'it', 'them')} off. Fix the cause, then turn ${plural($suspendedFlows.length, 'it', 'them')} back on.`,
+        count: $suspendedFlows.length,
+        clear: 'No flow is suspended',
+        href: '/flows?state=suspended',
+        unavailable: Boolean($workflowsError),
+      },
+      {
+        id: 'quiet-flows',
+        group: 'Breaking now',
+        severity: 'critical',
+        title: `${$quietFlows.length} ${plural($quietFlows.length, 'flow has', 'flows have')} gone quiet`,
+        action: 'Each has missed several runs it would normally have made by now. An expired trigger connection stops a flow without failing it, so check its connections.',
+        count: $quietFlows.length,
+        clear: 'Every regular flow is running to its usual rhythm',
+        href: '/flows?runs=quiet',
+        unavailable: Boolean($flowRunsError || $workflowsError),
+      },
       {
         id: 'unresolved-env-vars',
         group: 'Breaking now',
@@ -199,10 +228,10 @@ export const healthChecks: Readable<HealthCheck[]> = derived(
         id: 'disabled-owner-flows',
         group: 'Risk and hygiene',
         severity: 'attention',
-        title: `${orphanedFlows} ${plural(orphanedFlows, 'flow is', 'flows are')} owned by a disabled user`,
-        action: 'The owner has left. Reassign them before the account is deleted and they stop running.',
+        title: `${orphanedFlows} ${plural(orphanedFlows, 'flow is', 'flows are')} owned by a disabled account`,
+        action: 'Reassign them to an active owner before the account is removed, or they will stop running.',
         count: orphanedFlows,
-        clear: 'Every flow owner is an active user',
+        clear: 'Every flow has an active owner',
         href: '/flows?owner=disabled',
         unavailable: Boolean($usersError || $workflowsError),
       },
@@ -210,10 +239,10 @@ export const healthChecks: Readable<HealthCheck[]> = derived(
         id: 'disabled-owner-apps',
         group: 'Risk and hygiene',
         severity: 'attention',
-        title: `${orphanedApps} canvas ${plural(orphanedApps, 'app is', 'apps are')} owned by a disabled user`,
-        action: 'The owner has left. Reassign them so the app stays editable.',
+        title: `${orphanedApps} canvas ${plural(orphanedApps, 'app is', 'apps are')} owned by a disabled account`,
+        action: 'Reassign them to an active owner so the app stays editable.',
         count: orphanedApps,
-        clear: 'Every canvas app owner is an active user',
+        clear: 'Every canvas app has an active owner',
         href: '/canvas-apps?owner=disabled',
         unavailable: Boolean($usersError || $canvasAppsError),
       },
@@ -221,10 +250,10 @@ export const healthChecks: Readable<HealthCheck[]> = derived(
         id: 'disabled-owner-agents',
         group: 'Risk and hygiene',
         severity: 'attention',
-        title: `${orphanedAgents} ${plural(orphanedAgents, 'agent is', 'agents are')} owned by a disabled user`,
-        action: 'The owner has left. Reassign them so the agent stays maintainable.',
+        title: `${orphanedAgents} ${plural(orphanedAgents, 'agent is', 'agents are')} owned by a disabled account`,
+        action: 'Reassign them to an active owner so the agent can still be maintained.',
         count: orphanedAgents,
-        clear: 'Every agent owner is an active user',
+        clear: 'Every agent has an active owner',
         href: '/agents?owner=disabled',
         unavailable: Boolean($usersError || $botsError),
       },

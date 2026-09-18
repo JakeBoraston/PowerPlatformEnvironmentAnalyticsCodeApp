@@ -48,7 +48,7 @@ red for failed.
 
 - **How this app works** panel explaining where the data comes from and the security role to use (collapsible, remembers its state)
 - Platform tiles: canvas apps, model-driven apps, solutions, agents and active users
-- **Environment health**: fourteen checks over the environment, ranked, each with a count, what to do about it and a link to the records behind it. Unresolved environment variables, flows that have never succeeded, failed runs, failed solution operations and failed system jobs come first; then orphaned connection references, references outside a solution, flows binding connectors directly and assets owned by disabled users; then housekeeping such as flows that have not run, stale canvas apps and agents never published
+- **Environment health**: sixteen checks over the environment, ranked, each with a count, what to do about it and a link to the records behind it. Suspended flows, flows that have gone quiet (usually an expired trigger connection, which stops a flow without failing it), unresolved environment variables, flows that have never succeeded, failed runs, failed solution operations and failed system jobs come first; then orphaned connection references, references outside a solution, flows binding connectors directly and assets owned by disabled users; then housekeeping such as flows that have not run, stale canvas apps and agents never published
 - Flow run tiles: total, succeeded, failed, cancelled, typical (median) run time with a count of runs that waited over a day, and active flows
 - **Runs Over Time** by status, and a **Success Rate** gauge
 - **Flow Activity by Day & Hour** heatmap showing when flows run
@@ -64,7 +64,7 @@ red for failed.
 ![Cloud Flows](docs/images/flows.png)
 
 - Every cloud flow with its owner, state, created date and, for the selected period, total, succeeded and failed runs and success rate
-- Search by name or owner, filter by state, sort any column
+- Search by name or owner; filter by state (including suspended), owner account, and runs (none in the period, or gone quiet); sort any column
 - Open any flow in Power Automate
 
 ### Flow detail
@@ -72,6 +72,7 @@ red for failed.
 ![Flow detail](docs/images/flow-detail.png)
 
 - Run tiles: total, succeeded, failed, cancelled and typical (median) run time
+- A warning when the flow is suspended (with Power Automate's reason) or has gone quiet
 - Run trend over the period, and a day-and-hour heatmap for this flow
 - Run history filtered by result, with start and end times, duration, trigger and error
 - Links to the flow and to each run in Power Automate
