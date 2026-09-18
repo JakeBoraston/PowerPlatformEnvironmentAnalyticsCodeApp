@@ -32,7 +32,7 @@ and import it. Nothing to build.
    that they could not load rather than showing figures.
 
 To update later, download the newer zip and import it the same way; it upgrades
-the app in place. Building from source is covered further down, and is only
+the app in place. What changed in each version is in the [changelog](CHANGELOG.md). Building from source is covered further down, and is only
 needed if you want to change the app.
 
 ## What's in it
